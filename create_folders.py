@@ -2,11 +2,11 @@ import pandas as pd
 import os
 
 # Load Excel file
-excel_file = "Downloads/Test_file.xlsx" # Replace with your Excel file path
+excel_file = r"C:\Users\User\test.xlsx" # Replace with your Excel file path
 df = pd.read_excel(excel_file)
 
 # Base directory where folders will be created
-base_dir = "Downloads/output_folders" # Replace with your desired output directory
+base_dir = r"C:\Users\User\output_folders" # Replace with your desired output directory
 
 # Loop through each row
 for index, row in df.iterrows():
