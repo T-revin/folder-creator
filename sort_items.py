@@ -2,8 +2,8 @@ import os
 import shutil
 
 # Paths
-base_dir = r"C:\Users\User\output_folders"  # Where folders were created
-items_dir = r"C:\Users\User\Items"          # Folder containing files to sort
+base_dir = r"C:\Users\User\downloads\output_folders"  # Where folders were created
+items_dir = r"C:\Users\User\downloads\Items"          # Folder containing files to sort
 
 # Loop through files in Items folder
 for filename in os.listdir(items_dir):
@@ -20,7 +20,10 @@ for filename in os.listdir(items_dir):
         continue
 
     top_folder = parts[0]
-    subfolder = parts[1].split('.')[0]  # Remove file extension
+    subfolder_raw = parts[1].split('.')[0]  # Remove file extension
+
+    # Remove anything after '-' in subfolder name
+    subfolder = subfolder_raw.split('-')[0]
 
     # Build destination path
     dest_path = os.path.join(base_dir, top_folder, subfolder)

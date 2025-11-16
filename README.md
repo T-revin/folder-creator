@@ -81,6 +81,18 @@ Example:
 
 - `HR_Payroll.docx` → moved to `output_folders/HR/Payroll`
 
+### ✅ Dash Handling in Filenames
+
+The `sort_items.py` script supports filenames with additional identifiers after a dash (`-`).
+Anything after the dash is ignored for sorting purposes.
+
+**Example:**
+
+- `HR_Training-50.docx` → moved to `output_folders/HR/Training`
+- `IT_Hardware-Extra.pdf` → moved to `output_folders/IT/Hardware`
+
+This allows you to keep extended names without affecting folder assignment.
+
 ---
 
 ## ✅ Notes
