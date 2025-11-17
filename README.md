@@ -31,24 +31,35 @@ pip install pandas openpyxl
 
 ### **Excel File Structure**
 
-Your Excel file should look like this:
+Excel file should look like this:
 
-| TopFolder | Sub1     | Sub2        | Sub3       | Sub4       | Sub5    | Sub6        |
-| --------- | -------- | ----------- | ---------- | ---------- | ------- | ----------- |
-| HR        | Payroll  | Recruitment | Training   | Benefits   | Reports | Compliance  |
-| IT        | Hardware | Software    | Networking | Security   | Support | Projects    |
-| Finance   | Accounts | Budget      | Audit      | Compliance | Tax     | Investments |
+| Path                       |
+| -------------------------- |
+| HR/Training/Level 4/401/A1 |
+| HR/Payroll/Level 5/501/A2  |
+| IT/Hardware/Specs/Version1 |
 
-- Column A = Top-level folder name.
-- Columns B–G = Subfolders (all directly under the top folder).
+- Each row contains a full folder path separated by `/`.
+- This supports unlimited nesting.
 
 ---
+
+### Example Behavior:
+
+- `HR/Training/Level 4/401/A1` → Creates nested folders: HR → Training → Level 4 → 401 → A1.
 
 ## ✅ How to Run `create_folders.py`
 
 1. Open **VS Code**.
 2. Place `create_folders.py` in your project folder.
-3. Run the script:
+3. Update the script with your Excel file path and output folder path:
+
+```python
+excel_file = r"C:\Users\User\Downloads\nested_paths.xlsx"
+base_dir = r"C:\Users\User\Downloads\output_folders"
+```
+
+4. Run the script:
 
 ```bash
 python create_folders.py
@@ -64,22 +75,15 @@ The script will create the folder structure based on your Excel file.
 
 ## ✅ How to Run `sort_items.py`
 
-1. Make sure your folders are already created.
-2. Place all files you want to sort in a folder called `Items`.
-3. Run the script:
+- Place all files you want to sort in a folder called `Items`.
+- Filenames should follow the pattern:
+  - `TopFolder_Subfolder` for one level.
+  - `TopFolder_Subfolder_SubSubfolder` for multiple levels.
+- The script will create nested folders if needed.
 
-```bash
-python sort_items.py
-```
+### ✅ Unlimited nesting:
 
-The script will:
-
-- Read each file name in `Items`.
-- Move it to the correct subfolder based on the naming pattern `TopFolder_Subfolder`.
-
-Example:
-
-- `HR_Payroll.docx` → moved to `output_folders/HR/Payroll`
+- "\_" character indicates a new level: `HR_Training_JohnSmith.docx` → goes to `HR/Training/JohnSmith`.
 
 ### ✅ Dash Handling in Filenames
 
