@@ -12,13 +12,11 @@ base_dir = r"C:\Users\User\downloads\output_folders" # Replace with your desired
 os.makedirs(base_dir, exist_ok=True)
 
 # Loop through each path in the Excel file
-for path in df['Path']:
+for path in df.iloc[:, 0]:  # Use first colum in Excel file
     if pd.isna(path):
         continue
-
     # Split the path into parts
     parts = str(path).strip().split('/')
-
     # Build nested folder structure
     current_path = base_dir
     for part in parts:
