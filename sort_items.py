@@ -13,20 +13,25 @@ for filename in os.listdir(items_dir):
     if not os.path.isfile(file_path):
         continue
 
+    # Remove extension for folder parsing
+    name_without_ext = os.path.splitext(filename)[0]
+
     # Split filename by underscore
     parts = filename.split('_')
     if len(parts) < 2:
         print(f"Skipping {filename}: invalid format")
         continue
 
-    top_folder = parts[0]
-    subfolder_raw = parts[1].split('.')[0]  # Remove file extension
+    # Handle dash in last part (ignore anything after '-')
+    cleaned_parts = [p.split('-')[0] for p in parts]
 
-    # Remove anything after '-' in subfolder name
-    subfolder = subfolder_raw.split('-')[0]
+    # Build nested destination path
+    dest_folder = base_dir
+    for part in cleaned_parts:
+        dest_folder = os.path.join(dest_folder, part)
 
-    # Build destination path
-    dest_path = os.path.join(base_dir, top_folder, subfolder)
+    # Ensure destination folder exists
+    os.makedirs(dest_folder, exist_ok=True)
 
     # Check if destination exists
     if os.path.exists(dest_path):
