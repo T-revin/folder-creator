@@ -33,12 +33,9 @@ for filename in os.listdir(items_dir):
     # Ensure destination folder exists
     os.makedirs(dest_folder, exist_ok=True)
 
-    # Check if destination exists
-    if os.path.exists(dest_path):
-        # Move file
-        shutil.move(file_path, os.path.join(dest_path, filename))
-        print(f"Moved {filename} to {dest_path}")
-    else:
-        print(f"Destination folder not found for {filename}: {dest_path}")
+    # Move file
+    dest_file = os.path.join(dest_folder, filename)
+    shutil.move(file_path, dest_file)
+    print(f"Moved {filename} to {dest_folder}")
 
 print("Sorting complete!")
