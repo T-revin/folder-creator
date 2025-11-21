@@ -31,22 +31,58 @@ pip install pandas openpyxl
 
 ### **Excel File Structure**
 
-Excel file should look like this:
+The script expects an Excel file where **column headers define the folder hierarchy**.
 
-| Path                       |
-| -------------------------- |
-| HR/Training/Level 4/401/A1 |
-| HR/Payroll/Level 5/501/A2  |
-| IT/Hardware/Specs/Version1 |
-
-- Each row contains a full folder path separated by `/`.
-- This supports unlimited nesting.
+- The **Header Name** determines the nesting level and parent folders.
+- The **Row Values** determine the specific subfolders to be created at that level.
 
 ---
 
-### Example Behavior:
+### **Dynamic Nesting Rules**
 
-- `HR/Training/Level 4/401/A1` → Creates nested folders: HR → Training → Level 4 → 401 → A1.
+There are two ways to define where subfolders are created:
+
+#### **1. Generic (Wildcard) - Apply to ALL**
+If you use the **generic level name** (e.g., `Level1`, `Dept`, `Team`) in the header path, the new subfolders will be created inside **EVERY** folder at that level.
+
+**Example:**
+- Header: `Dept/Team` (where `Dept` is the generic name for the first level)
+- Row Values: `Alpha`, `Beta`
+- **Result**: `Alpha` and `Beta` folders are created inside **every** Department folder found.
+
+#### **2. Specific - Apply to ONE**
+If you use a **specific folder name** in the header path, the new subfolders will be created **ONLY** inside that specific folder.
+
+**Example:**
+- Header: `HR/Policies` (where `HR` is a specific folder created in Level 1)
+- Row Values: `2024`, `2025`
+- **Result**: `2024` and `2025` folders are created **only** inside the `HR` folder. They will NOT be created in `IT` or `Finance`.
+
+---
+
+### **Example Table**
+
+| Dept | Dept/Team | HR/Policies |
+| :--- | :--- | :--- |
+| HR | Alpha | 2024 |
+| IT | Beta | 2025 |
+
+**Resulting Structure:**
+```text
+HR/
+├── Alpha/
+├── Beta/
+└── Policies/
+    ├── 2024/
+    └── 2025/
+
+IT/
+├── Alpha/
+└── Beta/
+```
+*(Note: `Policies` is NOT created in `IT` because the header was `HR/Policies`, not `Dept/Policies`)*
+
+---
 
 ## ✅ How to Run `create_folders.py`
 
