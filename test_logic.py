@@ -1,18 +1,11 @@
 import pandas as pd
 import os
 
-# Load Excel file
-excel_file = r"C:\Users\User\Downloads\test_nest_v2.xlsx" # Test file for verification
-df = pd.read_excel(excel_file)
-
-# Base directory where folders will be created
-base_dir = r"C:\Users\User\downloads\output_folders" # Replace with your desired output directory
-
-# Ensure base directory exists
-os.makedirs(base_dir, exist_ok=True)
-
-def generate_paths(df):
+def generate_paths(excel_file):
+    df = pd.read_excel(excel_file)
+    
     # Set of all valid paths (tuples of segments)
+    # We start empty.
     all_paths = set()
     
     # Map of depth -> level name (generic name from header)
@@ -24,28 +17,21 @@ def generate_paths(df):
         target_depth = len(parts) - 1
         new_level_name = parts[-1]
         
-        # Register level name if not exists
+        # Register level name if not exists (or maybe overwrite? First one sets the standard?)
+        # Assuming the first time we see a depth, that's the generic name.
         if target_depth not in level_names:
             level_names[target_depth] = new_level_name
             
-        # Get values, filter NaNs and convert to string (removing .0 for floats if needed)
+        # Get values, filter NaNs
         values = df[col_name].dropna().astype(str).tolist()
+        values = [v.strip() for v in values if v.strip()]
         
-        # Clean values (remove .0 from floats if they were read as such)
-        cleaned_values = []
-        for v in values:
-            v = v.strip()
-            if v.endswith('.0'):
-                v = v[:-2]
-            if v:
-                cleaned_values.append(v)
-        
-        if not cleaned_values:
+        if not values:
             continue
             
         if target_depth == 0:
             # Root level
-            for v in cleaned_values:
+            for v in values:
                 all_paths.add((v,))
         else:
             # Extending existing paths
@@ -81,20 +67,15 @@ def generate_paths(df):
                 
                 if match:
                     # Add new children
-                    for v in cleaned_values:
+                    for v in values:
                         new_path = parent_path + (v,)
                         all_paths.add(new_path)
                         
     return sorted(list(all_paths))
 
-# Generate paths
-paths = generate_paths(df)
-
-# Create folders
-print(f"Found {len(paths)} paths to create.")
-for path_tuple in paths:
-    full_path = os.path.join(base_dir, *path_tuple)
-    os.makedirs(full_path, exist_ok=True)
-    # print(f"Created: {full_path}")
-
-print("Top folders and subfolders created successfully!")
+if __name__ == "__main__":
+    excel_file = r"C:\Users\User\Downloads\test_nest_v2.xlsx"
+    paths = generate_paths(excel_file)
+    print(f"Generated {len(paths)} paths:")
+    for p in paths:
+        print("/".join(p))
